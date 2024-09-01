@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2255563687672906389}
   - component: {fileID: 5103526794307375859}
   - component: {fileID: 7225863361567089482}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Crystal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,9 +134,9 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.02316353
-  m_Center: {x: -0.0055656265, y: 0.020712752, z: 0.013663673}
+  m_Radius: 0.027014315
+  m_Center: {x: -0.0055656275, y: 0.024563564, z: 0.01366367}

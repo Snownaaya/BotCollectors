@@ -15,11 +15,11 @@ public class ResourcePool : MonoBehaviour
 
     private ObjectPool<Resource> _pool;
 
-    public event Action CountChaged;
+    private float _delay = 3f;
 
     public int ResourceCount { get; private set; }
 
-    private float _delay = 3f;
+    public event Action CountChanged;
 
     private void Awake()
     {
@@ -43,7 +43,7 @@ public class ResourcePool : MonoBehaviour
         item.gameObject.SetActive(false);
 
         ResourceCount++;
-        CountChaged?.Invoke();
+        CountChanged?.Invoke();
     }
 
     private void SpawnItem()
@@ -51,7 +51,7 @@ public class ResourcePool : MonoBehaviour
         Resource item = _pool.Get();
 
         item.transform.position = RandomPosition();
-
+        item.gameObject.SetActive(true);
         item.transform.SetParent(_container);
     }
 

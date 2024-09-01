@@ -1,4 +1,3 @@
-
 public class BotIdleState : BotState
 {
     public override void Enter() =>

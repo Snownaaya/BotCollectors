@@ -1,10 +1,9 @@
-
 public class CollectResourceState : BotState
 {
     public override void Enter()
     {
         base.Enter();
-        Resource?.PickUp(CurrentBotState.transform);
+        Resource.PickUp(CurrentBotState.transform);
         CurrentBotState.OnDestinationReached += StateMachine.MoveToBase;
     }
 

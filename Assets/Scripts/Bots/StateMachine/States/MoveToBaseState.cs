@@ -1,4 +1,3 @@
-
 public class MoveToBaseState : BotState
 {
     public override void Enter()
@@ -11,7 +10,7 @@ public class MoveToBaseState : BotState
     public override void Exit()
     {
         base.Exit();
-        ResourcePool.ReturnItem(Resource);
+        //ResourcePool.ReturnItem(Resource);
         CurrentBotState.OnDestinationReached -= StateMachine.FinishWork;
     }
 }

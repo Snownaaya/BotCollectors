@@ -1,4 +1,3 @@
-
 public class MovementState : BotState
 {
     public override void Enter()
