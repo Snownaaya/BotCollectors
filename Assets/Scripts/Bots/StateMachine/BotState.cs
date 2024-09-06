@@ -3,7 +3,6 @@ using UnityEngine;
 public abstract class BotState : MonoBehaviour
 {
     public Bot CurrentBotState { get; private set; }
-    public ResourcePool ResourcePool { get; private set; }
     public Base Base { get; private set; }
     public Resource Resource { get; private set; }
     public StateMachine StateMachine { get; private set; }
@@ -14,11 +13,10 @@ public abstract class BotState : MonoBehaviour
     private void Awake() =>
         enabled = false;
 
-    public void Init(Base @base, Bot bot, Resource resource, ResourcePool resourcePool,  StateMachine state, Flag flag , BaseCreator baseCreat, FlagHandler flagHandler)
+    public void Init(Base @base, Bot bot, Resource resource, StateMachine state, Flag flag , BaseCreator baseCreat, FlagHandler flagHandler)
     {
         CurrentBotState = bot;
         Resource = resource;
-        ResourcePool = resourcePool; 
         Base = @base;
         StateMachine = state; 
         BaseCreat = baseCreat; 

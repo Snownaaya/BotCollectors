@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
-using System;
 
 public class ResourcePool : MonoBehaviour
 {
@@ -16,10 +15,6 @@ public class ResourcePool : MonoBehaviour
     private ObjectPool<Resource> _pool;
 
     private float _delay = 3f;
-
-    public int ResourceCount { get; private set; }
-
-    public event Action CountChanged;
 
     private void Awake()
     {
@@ -41,9 +36,6 @@ public class ResourcePool : MonoBehaviour
     public void ReturnItem(Resource item)
     {
         item.gameObject.SetActive(false);
-
-        ResourceCount++;
-        CountChanged?.Invoke();
     }
 
     private void SpawnItem()
@@ -68,8 +60,8 @@ public class ResourcePool : MonoBehaviour
 
     private Vector3 RandomPosition()
     {
-        float positionX = UnityEngine.Random.Range(_horizontalMinBounds, _horizontalMaxBounds);
-        float positionZ = UnityEngine.Random.Range(_verticalMinBounds, _verticalMaxBounds);
+        float positionX = Random.Range(_horizontalMinBounds, _horizontalMaxBounds);
+        float positionZ = Random.Range(_verticalMinBounds, _verticalMaxBounds);
 
         Vector3 loacPosition = new Vector3(positionX, 0f, positionZ);
 

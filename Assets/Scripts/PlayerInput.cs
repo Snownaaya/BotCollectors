@@ -34,7 +34,6 @@ public class PlayerInput : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _groundLayer))
         {
-            Debug.Log("Setting flag on ground at: " + hit.point);
             _flagHandler.SetFlagPosition(hit.point);
             _isSettingFlag = false;
         }

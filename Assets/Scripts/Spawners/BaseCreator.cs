@@ -1,21 +1,15 @@
 using UnityEngine;
-using System.Collections.Generic;
 using Zenject;
 
 public class BaseCreator : MonoBehaviour
 {
-    [Inject] private ResourcePool _resourcePool;
+    [Inject] private DiContainer _container;
 
-    [SerializeField] private Base _base;
-    [SerializeField] private ResourceScanner _resourceScanner;
+    [SerializeField] private Base _basePrefab;
     
-    public Base CreateBase(Vector3 position, StateMachine tranfferingBot)
+    public Base CreateBase(Vector3 position)
     {
-        Base newBase = Instantiate(_base, position, Quaternion.identity);
-        newBase.Init(tranfferingBot, _resourcePool);
-        newBase.AddBot(tranfferingBot);
-
-        tranfferingBot.Init(newBase, _resourceScanner);
+        Base newBase = _container.InstantiatePrefabForComponent<Base>(_basePrefab, position, Quaternion.identity, null);
         return newBase;
     }
 }

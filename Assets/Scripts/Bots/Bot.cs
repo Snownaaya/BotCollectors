@@ -1,18 +1,26 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using Zenject;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Bot : MonoBehaviour
 {
+    [Inject] private ResourcePool _resourcePool;
+
     [SerializeField] private BaseCreator _baseCreator;
 
     private NavMeshAgent _agent;
+    private StateMachine _bot;
 
+    public Base BaseHome { get; private set; }
     public event Action OnDestinationReached;
 
-    private void Awake() =>
+    private void Awake()
+    {
         _agent = GetComponent<NavMeshAgent>();
+        _bot = GetComponent<StateMachine>();
+    }
 
     private void Start()
     {
@@ -29,11 +37,14 @@ public class Bot : MonoBehaviour
     public void SetDestination(Vector3 destination) =>
         _agent.SetDestination(destination);
 
-    public void BuildNewBase(StateMachine transfferingBot, Flag currentFlag, Vector3 position)
+    public Base BuildNewBase(Flag currentFlag)
     {
-        if (currentFlag == null) return;
+        if (currentFlag == null) return null;
 
-        _baseCreator.CreateBase(currentFlag.transform.position, transfferingBot);
+        Base @base = _baseCreator.CreateBase(currentFlag.transform.position);
+        @base.Init(_bot, _resourcePool);
         currentFlag.TurnOff();
+
+        return @base;
     }
 }

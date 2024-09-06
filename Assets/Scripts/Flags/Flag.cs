@@ -1,18 +1,14 @@
 using UnityEngine;
 using System;
 
-public class Flag : MonoBehaviour, IFlag
+public class Flag : MonoBehaviour
 {
-    public bool IsPlaced { get; private set; }
-
     public event Action OnSetFlag;
 
     public void SetPosition(Vector3 position)
     {
-        IsPlaced = true;
         transform.position = position; 
         OnSetFlag?.Invoke(); 
-        Debug.Log("Flag position set.");
     }
 
     public void SetActive(bool isActive) =>
@@ -20,7 +16,6 @@ public class Flag : MonoBehaviour, IFlag
 
     public void TurnOff()
     {
-        IsPlaced = false;
         gameObject.SetActive(false);
     }
 }

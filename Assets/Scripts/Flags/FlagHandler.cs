@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FlagHandler : MonoBehaviour, IFlagHandler
+public class FlagHandler : MonoBehaviour
 {
     [SerializeField] private Flag _flagPrefab;
 
@@ -17,5 +17,4 @@ public class FlagHandler : MonoBehaviour, IFlagHandler
         CurrentFlag.SetPosition(position); 
         CurrentFlag.SetActive(true);
     }
-
 }

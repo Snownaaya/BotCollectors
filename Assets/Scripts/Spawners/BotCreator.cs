@@ -1,15 +1,15 @@
 using UnityEngine;
+using Zenject;
 
 public class BotCreator : MonoBehaviour
 {
+    [Inject] private DiContainer _container;
+
     [SerializeField] private StateMachine _botState;
-    [SerializeField] private Base _base;
-    [SerializeField] private ResourceScanner _resourceScanner;
 
     public StateMachine CreateBot()
     {
-        StateMachine newBot = Instantiate(_botState);
-        newBot.Init(_base, _resourceScanner);
-        return newBot;
+        StateMachine bot = _container.InstantiatePrefabForComponent<StateMachine>(_botState);
+        return bot;
     }
 }

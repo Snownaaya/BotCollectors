@@ -1,0 +1,9 @@
+using Zenject;
+
+public class BotInstaller : MonoInstaller
+{
+    public override void InstallBindings()
+    {
+        Container.Bind<Base>().FromNewComponentOnNewGameObject().AsTransient();
+    }
+}

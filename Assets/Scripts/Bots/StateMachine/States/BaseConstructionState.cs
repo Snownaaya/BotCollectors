@@ -4,17 +4,12 @@ public class BaseConstructionState : BotState
     {
         base.Enter();
         CurrentBotState.SetDestination(Flag.transform.position);
-        CurrentBotState.OnDestinationReached += HandleConstruction;
+        CurrentBotState.OnDestinationReached += StateMachine.CompleteBaseConstruction;
     }
 
     public override void Exit()
     {
         base.Exit();
-        CurrentBotState.OnDestinationReached -= HandleConstruction;
-    }
-
-    private void HandleConstruction()
-    {
-        StateMachine.CompleteBaseConstruction();
+        CurrentBotState.OnDestinationReached -= StateMachine.CompleteBaseConstruction;
     }
 }
