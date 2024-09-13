@@ -3,17 +3,16 @@ using UnityEngine.AI;
 using System;
 using Zenject;
 
-[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent), typeof(StateMachine))]
 public class Bot : MonoBehaviour
 {
-    [Inject] private ResourcePool _resourcePool;
+    [Inject] private ResourceSpawner _resourcePool;
 
     [SerializeField] private BaseCreator _baseCreator;
 
     private NavMeshAgent _agent;
     private StateMachine _bot;
 
-    public Base BaseHome { get; private set; }
     public event Action OnDestinationReached;
 
     private void Awake()
@@ -39,7 +38,8 @@ public class Bot : MonoBehaviour
 
     public Base BuildNewBase(Flag currentFlag)
     {
-        if (currentFlag == null) return null;
+        if (currentFlag == null)
+            return null;
 
         Base @base = _baseCreator.CreateBase(currentFlag.transform.position);
         @base.Init(_bot, _resourcePool);

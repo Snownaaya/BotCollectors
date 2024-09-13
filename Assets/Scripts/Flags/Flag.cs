@@ -3,19 +3,17 @@ using System;
 
 public class Flag : MonoBehaviour
 {
-    public event Action OnSetFlag;
+    public event Action Setted;
 
     public void SetPosition(Vector3 position)
     {
-        transform.position = position; 
-        OnSetFlag?.Invoke(); 
+        transform.position = position;
+        Setted?.Invoke();
     }
 
     public void SetActive(bool isActive) =>
         gameObject.SetActive(isActive);
 
-    public void TurnOff()
-    {
+    public void TurnOff() =>
         gameObject.SetActive(false);
-    }
 }

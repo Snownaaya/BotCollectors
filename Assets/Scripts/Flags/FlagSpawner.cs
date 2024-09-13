@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FlagHandler : MonoBehaviour
+public class FlagSpawner : MonoBehaviour
 {
     [SerializeField] private Flag _flagPrefab;
 

@@ -663,7 +663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _base: {fileID: 3310495579825400952, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
   _flagHandler: {fileID: 5412279706137648740, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
-  _resourceHandler: {fileID: 2307380016143952924, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
+  _resourceStorage: {fileID: 6994502251285989526, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
 --- !u!114 &371324375030618427
 MonoBehaviour:
   m_ObjectHideFlags: 0

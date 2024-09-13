@@ -1,8 +1,6 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(Base))]
 public class ResourceScanner : MonoBehaviour
 {
     [SerializeField] private LayerMask _resourceLayer;

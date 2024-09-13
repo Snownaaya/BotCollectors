@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class ResourcePool : MonoBehaviour
+public class ResourceSpawner : MonoBehaviour
 {
     [SerializeField] private Resource _item;
     [SerializeField] private Transform _container;

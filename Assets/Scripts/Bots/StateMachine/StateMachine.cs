@@ -7,8 +7,8 @@ using System.Collections.Generic;
 public class StateMachine : MonoBehaviour
 {
     [SerializeField] private Base _base;
-    [SerializeField] private FlagHandler _flagHandler;
-    [SerializeField] private ResourceHandler _resourceHandler;
+    [SerializeField] private FlagSpawner _flagHandler;
+    [SerializeField] private ResourceStorage _resourceStorage;
 
     private Dictionary<Type, BotState> _states = new Dictionary<Type, BotState>();
 
@@ -62,7 +62,7 @@ public class StateMachine : MonoBehaviour
 
     public void StartCollect()
     {
-        if (_resourceHandler.TryAssignResource(_currentResource))
+        if (_resourceStorage.RequestResource(_currentResource))
         {
             if (Vector3.Distance(_bot.transform.position, _currentResource.transform.position) < 1f)
                 ChangeState(typeof(CollectResourceState));
@@ -79,7 +79,6 @@ public class StateMachine : MonoBehaviour
     public void FinishWork()
     {
         _base.ResourceCollect(_currentResource);
-        _resourceHandler.ReleaseResource(_currentResource);
         _currentResource.Release();
         ChangeState(typeof(BotIdleState));
     }
@@ -88,9 +87,7 @@ public class StateMachine : MonoBehaviour
     {
         _base.CompleteConstruction(this);
 
-        ChangeState(typeof(BotIdleState));
-
-        if (_currentResource != null && _resourceHandler.TryAssignResource(_currentResource))
+        if (_currentResource != null)
             StartSearchingForResource(_currentResource);
         else
             ChangeState(typeof(BotIdleState));
