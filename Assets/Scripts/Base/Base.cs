@@ -45,7 +45,7 @@ public class Base : MonoBehaviour
     private void Start()
     {
         _resourceStorage.AddResource(8);
-        StartCoroutine(ScaningResources());
+        StartCoroutine(SvanAndAssignResources());
         CurrentFlag.Setted += OnSetFlag;
     }
 
@@ -156,7 +156,7 @@ public class Base : MonoBehaviour
     private void RemoveBot(StateMachine bot) =>
         _bots.Remove(bot);
 
-    private IEnumerator ScaningResources()
+    private IEnumerator SvanAndAssignResources()
     {
         while (enabled)
         {
