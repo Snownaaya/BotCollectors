@@ -16,5 +16,5 @@ public class ScoreView : MonoBehaviour
         _base.CountChanged -= UpdateScore;
 
     public void UpdateScore() =>
-        _resourceScore.text = $"resource: {_base.CollectedResource}";
+        _resourceScore.text = $"resource: {_base.CurrentResource}";
 }

@@ -4,14 +4,19 @@ using System;
 
 public class ResourceStorage : MonoBehaviour
 {
-    [SerializeField] private int _totalResources;
+    [SerializeField] private int _totalResources = 0;
 
     private List<Resource> _assignedResources = new List<Resource>();
+
+    public int CurrentResource => _totalResources;
 
     public void SpendResource(int amount)
     {
         if (amount <= 0)
             throw new InvalidOperationException("cost should be positive");
+
+        if (_totalResources < amount)
+            return;
 
         _totalResources -= amount;
     }
@@ -27,7 +32,7 @@ public class ResourceStorage : MonoBehaviour
     public bool TryRequestResource(Resource requestedResource)
     {
         if (_assignedResources.Contains(requestedResource))
-            return false; 
+            return false;
 
         _assignedResources.Add(requestedResource);
         return true;

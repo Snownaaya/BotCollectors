@@ -429,7 +429,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 963194227}
-  _flagSpawner: {fileID: 5412279706137648740, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
   _baseLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -1215,6 +1214,10 @@ PrefabInstance:
       propertyPath: _flagPrefab
       value: 
       objectReference: {fileID: 5177853462958806287, guid: b5f652bf63b301d41b6df906f4db2add, type: 3}
+    - target: {fileID: 6994502251285989526, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
+      propertyPath: _totalResources
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7249681566100917326, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -1224,7 +1227,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 390150911132106252, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects:
     - {fileID: 3582588677306548097, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
     m_AddedGameObjects:

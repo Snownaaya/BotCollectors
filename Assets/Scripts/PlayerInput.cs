@@ -1,47 +1,71 @@
+using System;
 using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    private const int LeftMouseButton = 0;
-    private const int RightMouseButton = 1;
+    private const int SelectMouseButton = 0;
+    private const int DeselectMouseButton = 1;
 
     [SerializeField] private Camera _camera;
-    [SerializeField] private FlagSpawner _flagSpawner;
 
     [SerializeField] private LayerMask _baseLayer;
     [SerializeField] private LayerMask _groundLayer;
 
+    private Flag _selectedFlag;
     private Base _selectedBase;
-    private bool _isSettingFlag = false;
+    private MaterialChanger _materialChanger;
+
+    private bool _isSettingFlag = true;
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(LeftMouseButton))
+        if (Input.GetMouseButtonDown(SelectMouseButton))
         {
-            if (_isSettingFlag)
+            if (_isSettingFlag && _selectedBase != null)
                 SetFlagOnGround();
             else
-                TrySelectBase();
+                SelectBase();
         }
-        else if(Input.GetMouseButtonDown(RightMouseButton))
+        else if (Input.GetMouseButtonDown(DeselectMouseButton))
         {
-            DeselectBase();
+            CancelFlagPlacment();
         }
     }
 
-    private void TrySelectBase()
+    private void SelectBase()
     {
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _baseLayer))
         {
-            Base newBase = hit.collider.GetComponent<Base>();
-
-            if (newBase != null)
+            if (hit.collider.TryGetComponent(out Base @base) && hit.collider.TryGetComponent(out MaterialChanger material))
             {
-                SelectBase(newBase);
+                _selectedBase = @base;
+                _selectedFlag = @base.GetFlag;
+                _materialChanger = material;
+                _materialChanger.Highlight();
             }
+
+            _isSettingFlag = true;
         }
+    }
+
+    private void CancelFlagPlacment()
+    {
+        _selectedFlag.TurnOff();
+        _isSettingFlag = false;
+
+        _selectedBase.CanceledConstruction();
+
+        DeselectBase();
+    }
+
+    private void DeselectBase()
+    {
+        _materialChanger.RemoveHighlight();
+        _materialChanger = null;
+        _selectedBase = null;
+        _isSettingFlag = false;
     }
 
     private void SetFlagOnGround()
@@ -51,28 +75,8 @@ public class PlayerInput : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _groundLayer))
         {
             _selectedBase.SetFlagPosition(hit.point);
-            _isSettingFlag = false;
-        }
-    }
-
-    private void SelectBase(Base newBase)
-    {
-        if (_selectedBase != null)
-            _selectedBase.SetSelect(false);
-
-        _selectedBase = newBase;
-        _selectedBase.SetSelect(true);
-
-        _isSettingFlag = true;
-    }
-
-    private void DeselectBase()
-    {
-        if (_selectedBase != null)
-        {
-            _selectedBase.SetSelect(false);
-            _selectedBase = null;
-            _isSettingFlag = false;
+            _isSettingFlag = true;
+            DeselectBase();
         }
     }
 }

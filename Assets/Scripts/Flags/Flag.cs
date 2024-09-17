@@ -8,11 +8,9 @@ public class Flag : MonoBehaviour
     public void SetPosition(Vector3 position)
     {
         transform.position = position;
+        gameObject.SetActive(true);
         Setted?.Invoke();
     }
-
-    public void SetActive(bool isActive) =>
-        gameObject.SetActive(isActive);
 
     public void TurnOff() =>
         gameObject.SetActive(false);

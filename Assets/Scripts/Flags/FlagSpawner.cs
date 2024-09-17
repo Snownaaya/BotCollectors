@@ -6,15 +6,10 @@ public class FlagSpawner : MonoBehaviour
 
     public Flag CurrentFlag { get; private set; }
 
-    private void Awake()
+    public Flag Create()
     {
         CurrentFlag = Instantiate(_flagPrefab);
-        CurrentFlag.SetActive(false);
-    }
-
-    public void SetFlagPosition(Vector3 position)
-    {
-        CurrentFlag.SetPosition(position); 
-        CurrentFlag.SetActive(true);
+        CurrentFlag.gameObject.SetActive(false);
+        return CurrentFlag;
     }
 }
