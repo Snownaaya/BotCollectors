@@ -16,8 +16,8 @@ public class Base : MonoBehaviour
     [SerializeField] private List<StateMachine> _bots = new List<StateMachine>();
     [SerializeField] private ResourceStorage _resourceStorage;
 
-    [SerializeField] private int _requiredResourcesForBase = 6;
-    [SerializeField] private int _resourcesForNewBot = 5;
+    [SerializeField] private int _requiredResourcesForBase = 5;
+    [SerializeField] private int _resourcesForNewBot = 3;
 
     private HashSet<Resource> _assignedResources = new HashSet<Resource>();
 
