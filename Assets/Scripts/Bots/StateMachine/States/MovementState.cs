@@ -4,12 +4,12 @@ public class MovementState : BotState
     {
         base.Enter();
         CurrentBotState.SetDestination(Resource.transform.position);
-        CurrentBotState.OnDestinationReached += StateMachine.StartCollect;
+        CurrentBotState.DestinationReached += StateMachine.StartCollect;
     }
 
     public override void Exit()
     {
         base.Exit();
-        CurrentBotState.OnDestinationReached -= StateMachine.StartCollect;
+        CurrentBotState.DestinationReached -= StateMachine.StartCollect;
     }
 }

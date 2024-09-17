@@ -4,7 +4,7 @@ using System;
 
 public class ResourceStorage : MonoBehaviour
 {
-    private int _totalResources;
+    [SerializeField] private int _totalResources;
 
     private List<Resource> _assignedResources = new List<Resource>();
 
@@ -24,7 +24,7 @@ public class ResourceStorage : MonoBehaviour
         _totalResources += amount;
     }
 
-    public bool RequestResource(Resource requestedResource)
+    public bool TryRequestResource(Resource requestedResource)
     {
         if (_assignedResources.Contains(requestedResource))
             return false; 

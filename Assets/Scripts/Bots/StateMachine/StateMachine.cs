@@ -48,12 +48,6 @@ public class StateMachine : MonoBehaviour
     public void SetHome(Base @base) =>
         _base = @base;
 
-    public void StartSearchingForResource(Resource resource)
-    {
-        SetCurrentResource(resource);
-        ChangeState(typeof(MovementState));
-    }
-
     public void StartMove(Resource resource)
     {
         _currentResource = resource;
@@ -62,7 +56,7 @@ public class StateMachine : MonoBehaviour
 
     public void StartCollect()
     {
-        if (_resourceStorage.RequestResource(_currentResource))
+        if (_resourceStorage.TryRequestResource(_currentResource))
         {
             if (Vector3.Distance(_bot.transform.position, _currentResource.transform.position) < 1f)
                 ChangeState(typeof(CollectResourceState));
@@ -88,7 +82,7 @@ public class StateMachine : MonoBehaviour
         _base.CompleteConstruction(this);
 
         if (_currentResource != null)
-            StartSearchingForResource(_currentResource);
+            StartMove(_currentResource);
         else
             ChangeState(typeof(BotIdleState));
     }
@@ -100,7 +94,4 @@ public class StateMachine : MonoBehaviour
 
         ChangeState(typeof(BaseConstructionState));
     }
-
-    public void SetCurrentResource(Resource resource) =>
-        _currentResource = resource;
 }

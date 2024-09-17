@@ -13,7 +13,7 @@ public class Bot : MonoBehaviour
     private NavMeshAgent _agent;
     private StateMachine _bot;
 
-    public event Action OnDestinationReached;
+    public event Action DestinationReached;
 
     private void Awake()
     {
@@ -30,7 +30,7 @@ public class Bot : MonoBehaviour
     private void FixedUpdate()
     {
         if (_agent.remainingDistance <= _agent.stoppingDistance && !_agent.pathPending)
-            OnDestinationReached?.Invoke();
+            DestinationReached?.Invoke();
     }
 
     public void SetDestination(Vector3 destination) =>

@@ -5,8 +5,13 @@ public class Resource : MonoBehaviour
 {
     private Collider _collider;
 
-    private void Awake() =>
+    public int Amount { get; private set; }
+
+    private void Awake()
+    {
         _collider = GetComponent<Collider>();
+        Amount = 1;
+    }
 
     public void PickUp(Transform collector)
     {

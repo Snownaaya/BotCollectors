@@ -6,17 +6,18 @@ using Zenject;
 using System;
 
 [RequireComponent(typeof(ResourceStorage), typeof(ResourceScanner), typeof(FlagSpawner))]
+[RequireComponent(typeof(Renderer))]
 public class Base : MonoBehaviour
 {
     [Inject]
     private ResourceSpawner _resourcePool;
 
-    public const int RequiredResourcesForBase = 5;
-    public const int ResourcesForNewBot = 3;
-
     [SerializeField] private BotCreator _botCreateor;
     [SerializeField] private List<StateMachine> _bots = new List<StateMachine>();
     [SerializeField] private ResourceStorage _resourceStorage;
+
+    [SerializeField] private int _requiredResourcesForBase = 6;
+    [SerializeField] private int _resourcesForNewBot = 5;
 
     private HashSet<Resource> _assignedResources = new HashSet<Resource>();
 
@@ -24,13 +25,17 @@ public class Base : MonoBehaviour
     private ResourceScanner _resourceScanner;
     private WaitForSeconds _scanDelay;
 
+    private Renderer _renderer;
+    private Color _originalColor;
+    private Color _selectedColor = Color.green;
+
     private int _collectedResources = 0;
-    private bool IsConstructing;
+    private bool IsConstruct;
 
     public event Action CountChanged;
 
-    private Flag CurrentFlag => _flagSpawner?.CurrentFlag;
     public int CollectedResource => _collectedResources;
+    private Flag CurrentFlag => _flagSpawner?.CurrentFlag;
 
 
     private void Awake()
@@ -38,19 +43,33 @@ public class Base : MonoBehaviour
         _resourceScanner = GetComponent<ResourceScanner>();
         _resourceStorage = GetComponent<ResourceStorage>();
         _flagSpawner = GetComponent<FlagSpawner>();
+        _renderer = GetComponent<Renderer>();
 
-        _scanDelay = new WaitForSeconds(3f);
+        _originalColor = _renderer.material.color;
+        _scanDelay = new WaitForSeconds(1f);
     }
 
     private void Start()
     {
-        _resourceStorage.AddResource(8);
-        StartCoroutine(SvanAndAssignResources());
+        StartCoroutine(ScanAndAssignResources());
         CurrentFlag.Setted += OnSetFlag;
     }
 
     private void OnDisable() =>
         CurrentFlag.Setted -= OnSetFlag;
+
+    public void SetSelect(bool isSelect)
+    {
+        if (isSelect)
+        {
+            _renderer.material.color = _selectedColor;
+        }
+        else
+        {
+            _renderer.material.color = _originalColor;
+            CurrentFlag.TurnOff();
+        }
+    }
 
     public void Init(StateMachine initialBot, ResourceSpawner resource)
     {
@@ -60,29 +79,14 @@ public class Base : MonoBehaviour
     }
 
     public void OnSetFlag() =>
-        IsConstructing = true;
-
-    public void AssignBotToResource(Resource resource)
-    {
-        if (_resourceStorage.RequestResource(resource))
-        {
-            List<StateMachine> idleBots = GetIdleBots();
-
-            if (idleBots.Count > 0)
-            {
-                _assignedResources.Add(resource);
-                StateMachine bot = idleBots[0];
-                bot.StartMove(resource);
-            }
-        }
-    }
+        IsConstruct = true;
 
     public void ResourceCollect(Resource resource)
     {
         _collectedResources++;
         ProccesResourceCollect();
 
-        _resourceStorage.ReturnResource(resource);
+        _resourceStorage.AddResource(resource.Amount);
         _assignedResources.Remove(resource);
         _resourcePool.ReturnItem(resource);
 
@@ -100,26 +104,27 @@ public class Base : MonoBehaviour
         Base newBase = bot.GetComponent<Bot>().BuildNewBase(CurrentFlag);
         newBase.Init(bot, _resourcePool);
 
-        _resourceStorage.SpendResource(RequiredResourcesForBase);
+        _resourceStorage.SpendResource(_requiredResourcesForBase);
         bot.SetHome(newBase);
         newBase.AddBot(bot);
-        RemoveBot(bot);
-        IsConstructing = false;
+
+        _bots.RemoveAt(0);
+        IsConstruct = false;
     }
 
-    public void SetFlapPosition(Vector3 position) =>
+    public void SetFlagPosition(Vector3 position) =>
         _flagSpawner.SetFlagPosition(position);
 
     private void ProccesResourceCollect()
     {
-        if (IsConstructing)
+        if (IsConstruct)
         {
-            if (CurrentFlag != null && _collectedResources % RequiredResourcesForBase == 0)
+            if (CurrentFlag != null && _collectedResources % _requiredResourcesForBase == 0)
                 SetBaseToConstruct();
         }
         else
         {
-            if (_collectedResources % ResourcesForNewBot == 0)
+            if (_collectedResources % _resourcesForNewBot == 0)
                 CreateNewBot();
         }
     }
@@ -129,18 +134,11 @@ public class Base : MonoBehaviour
         if (CurrentFlag == null)
             return;
 
-        IsConstructing = false;
-        List<StateMachine> idleBots = GetIdleBots();
+        IsConstruct = false;
 
-        if (idleBots.Count > 0)
-        {
-            StateMachine bot = idleBots[0];
-            bot.StartConstructingBase(this, CurrentFlag);
-        }
+        if (_bots.Count > 0)
+            _bots[0].StartConstructingBase(this, CurrentFlag);
     }
-
-    private List<StateMachine> GetIdleBots() =>
-        _bots.Where(bot => bot != null && bot.IsIdle).ToList();
 
     private void CreateNewBot()
     {
@@ -149,14 +147,12 @@ public class Base : MonoBehaviour
         Vector3 spawnPosition = transform.position + new Vector3(0, 0, 1);
         newBot.transform.position = spawnPosition;
 
-        _resourceStorage.SpendResource(ResourcesForNewBot);
+        _resourceStorage.SpendResource(_resourcesForNewBot);
         newBot.SetHome(this);
         AddBot(newBot);
     }
-    private void RemoveBot(StateMachine bot) =>
-        _bots.Remove(bot);
 
-    private IEnumerator SvanAndAssignResources()
+    private IEnumerator ScanAndAssignResources()
     {
         while (enabled)
         {
@@ -166,6 +162,21 @@ public class Base : MonoBehaviour
                 AssignBotToResource(resource);
 
             yield return _scanDelay;
+        }
+    }
+
+    private void AssignBotToResource(Resource resource)
+    {
+        if (_assignedResources.Contains(resource))
+            return;
+
+        foreach (StateMachine bot in _bots)
+        {
+            if (bot.IsIdle && _resourceStorage.TryRequestResource(resource))
+            {
+                _assignedResources.Add(resource);
+                bot.StartMove(resource);
+            }
         }
     }
 }

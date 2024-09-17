@@ -4,12 +4,12 @@ public class CollectResourceState : BotState
     {
         base.Enter();
         Resource.PickUp(CurrentBotState.transform);
-        CurrentBotState.OnDestinationReached += StateMachine.MoveToBase;
+        CurrentBotState.DestinationReached += StateMachine.MoveToBase;
     }
 
     public override void Exit()
     {
         base.Exit();
-        CurrentBotState.OnDestinationReached -= StateMachine.MoveToBase;
+        CurrentBotState.DestinationReached -= StateMachine.MoveToBase;
     }
 }
