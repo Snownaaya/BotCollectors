@@ -84,12 +84,12 @@ public class Base : MonoBehaviour
     public void ResourceCollect(Resource resource)
     {
         _collectedResources++;
-        ProccesResourceCollect();
 
         _resourceStorage.AddResource(resource.Amount);
         _assignedResources.Remove(resource);
         _resourcePool.ReturnItem(resource);
 
+        ProccesResourceCollect();
         CountChanged?.Invoke();
     }
 

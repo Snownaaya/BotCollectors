@@ -1151,6 +1151,14 @@ PrefabInstance:
       propertyPath: _bots.Array.data[2]
       value: 
       objectReference: {fileID: 1004403894}
+    - target: {fileID: 3310495579825400952, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
+      propertyPath: _resourcesForNewBot
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310495579825400952, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
+      propertyPath: _requiredResourcesForBase
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4502607366521192637, guid: 57a9bb796a0e59f489ce88824d9b6e0e, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.1875
