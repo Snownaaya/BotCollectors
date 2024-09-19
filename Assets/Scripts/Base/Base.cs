@@ -22,14 +22,14 @@ public class Base : MonoBehaviour
     private FlagSpawner _flagSpawner;
     private ResourceScanner _resourceScanner;
     private WaitForSeconds _scanDelay;
+    private Flag _currentFlag;
 
     private bool _isConstruct;
 
     public event Action CountChanged;
 
-    public Flag GetFlag => CurrentFlag;
+    public Flag GetFlag => _currentFlag;
     public int CurrentResource => _resourceStorage.CurrentResource;
-    private Flag CurrentFlag => _flagSpawner?.CurrentFlag;
 
     private void Awake()
     {
@@ -43,12 +43,12 @@ public class Base : MonoBehaviour
     private void Start()
     {
         StartCoroutine(ScanAndAssignResources());
-        _flagSpawner.Create();
-        CurrentFlag.Setted += OnSetFlag;
+        _currentFlag = _flagSpawner.Create();
+        _currentFlag.Setted += OnSetFlag;
     }
 
     private void OnDestroy() =>
-        CurrentFlag.Setted -= OnSetFlag;
+        _currentFlag.Setted -= OnSetFlag;
 
     public void Init(StateMachine initialBot, ResourceSpawner resource)
     {
@@ -75,9 +75,8 @@ public class Base : MonoBehaviour
 
     public void CompleteConstruction(StateMachine bot)
     {
-        Base newBase = bot.GetComponent<Bot>().BuildNewBase(CurrentFlag);
+        Base newBase = bot.GetComponent<Bot>().BuildNewBase(_currentFlag);
 
-        _resourceStorage.SpendResource(_requiredResourcesForBase);
         bot.SetHome(newBase);
 
         _bots.RemoveAt(0);
@@ -91,7 +90,7 @@ public class Base : MonoBehaviour
     }
 
     public void SetFlagPosition(Vector3 position) =>
-        CurrentFlag.SetPosition(position);
+        _currentFlag.SetPosition(position);
 
     private void ProccesResourceCollect()
     {
@@ -109,13 +108,15 @@ public class Base : MonoBehaviour
 
     private void SetBaseToConstruct()
     {
-        if (CurrentFlag == null)
+        if (_currentFlag == null)
             return;
 
         _isConstruct = true;
 
         if (_bots.Count > 0)
-            _bots[0].StartConstructingBase(this, CurrentFlag);
+            _bots[0].StartConstructingBase(this, _currentFlag);
+
+        _resourceStorage.SpendResource(_requiredResourcesForBase);
     }
 
     private void CreateNewBot()

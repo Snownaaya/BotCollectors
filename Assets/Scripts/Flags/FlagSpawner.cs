@@ -4,12 +4,10 @@ public class FlagSpawner : MonoBehaviour
 {
     [SerializeField] private Flag _flagPrefab;
 
-    public Flag CurrentFlag { get; private set; }
-
     public Flag Create()
     {
-        CurrentFlag = Instantiate(_flagPrefab);
-        CurrentFlag.gameObject.SetActive(false);
-        return CurrentFlag;
+        Flag newFlag = Instantiate(_flagPrefab);
+        newFlag.gameObject.SetActive(false);
+        return newFlag;
     }
 }

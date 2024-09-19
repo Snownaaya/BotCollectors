@@ -28,7 +28,8 @@ public class PlayerInput : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(DeselectMouseButton))
         {
-            CancelFlagPlacment();
+            if (_selectedBase != null)
+                CancelFlagPlacment();
         }
     }
 
@@ -53,8 +54,6 @@ public class PlayerInput : MonoBehaviour
     private void CancelFlagPlacment()
     {
         _selectedFlag.TurnOff();
-        _isSettingFlag = false;
-
         _selectedBase.CanceledConstruction();
 
         DeselectBase();
